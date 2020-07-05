@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>搭建远程CMake环境 | 葱丁</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="CMake 是一个跨平台的、开源的构建工具。cmake 是 makefile 的上层工具，它们的目的正是为了产生可移植的makefile，并简化自己动手写makefile时的巨大工作量. 本文讲述同源代码来安装CMake. 工作前提 配置好了vscode 链接 虚拟机的环境  ( 参考前一篇博客 ) 虚拟机上有 git  c&#x2F;c++ 这两样工具.  现在链接虚拟机, 检查工作前提.  12345g">
+<meta property="og:type" content="article">
+<meta property="og:title" content="搭建远程CMake环境">
+<meta property="og:url" content="http://yoursite.com/2020/07/05/%E6%90%AD%E5%BB%BA%E8%BF%9C%E7%A8%8BCMake%E7%8E%AF%E5%A2%83/index.html">
+<meta property="og:site_name" content="葱丁">
+<meta property="og:description" content="CMake 是一个跨平台的、开源的构建工具。cmake 是 makefile 的上层工具，它们的目的正是为了产生可移植的makefile，并简化自己动手写makefile时的巨大工作量. 本文讲述同源代码来安装CMake. 工作前提 配置好了vscode 链接 虚拟机的环境  ( 参考前一篇博客 ) 虚拟机上有 git  c&#x2F;c++ 这两样工具.  现在链接虚拟机, 检查工作前提.  12345g">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-07-05T22:08:37.000Z">
+<meta property="article:modified_time" content="2020-07-05T22:11:47.228Z">
+<meta property="article:author" content="关文林">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="葱丁" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">葱丁</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-搭建远程CMake环境" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/07/05/%E6%90%AD%E5%BB%BA%E8%BF%9C%E7%A8%8BCMake%E7%8E%AF%E5%A2%83/" class="article-date">
+  <time datetime="2020-07-05T22:08:37.000Z" itemprop="datePublished">2020-07-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      搭建远程CMake环境
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>CMake</strong> 是一个<strong>跨平台</strong>的、<strong>开源的</strong>构建工具。<code>cmake</code> 是 <code>makefile</code> 的上层工具，它们的目的正是为了产生可移植的makefile，并简化自己动手写makefile时的巨大工作量.</p>
+<p>本文讲述同源代码来安装CMake.</p>
+<h2 id="工作前提"><a href="#工作前提" class="headerlink" title="工作前提"></a>工作前提</h2><ol>
+<li>配置好了vscode 链接 虚拟机的环境  ( 参考前一篇博客 )</li>
+<li>虚拟机上有 git  c/c++ 这两样工具. </li>
+<li>现在链接虚拟机, 检查工作前提.</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">gcc -v</span><br><span class="line">g++ -v</span><br><span class="line">gmake -v</span><br><span class="line">make -v</span><br><span class="line">git --version</span><br></pre></td></tr></table></figure>
+
+<p>如果检查失败, 请用下面的命令安装.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">yum install gcc-c++ gcc gdb automake autoconf libtool make -y</span><br><span class="line">yum install gir -y</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="从gittee搜索cmake-下载源码"><a href="#从gittee搜索cmake-下载源码" class="headerlink" title="从gittee搜索cmake 下载源码"></a>从gittee搜索cmake 下载源码</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /usr/<span class="built_in">local</span>/src/</span><br><span class="line">git <span class="built_in">clone</span> https://gitee.com/mirrors/CMake.git</span><br></pre></td></tr></table></figure>
+
+<h2 id="编译-安装-CMake"><a href="#编译-安装-CMake" class="headerlink" title="编译 / 安装 CMake"></a>编译 / 安装 CMake</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cd &#x2F;usr&#x2F;local&#x2F;src&#x2F;CMake</span><br><span class="line"> .&#x2F;bootstrap</span><br><span class="line"> gmake</span><br><span class="line"> make install</span><br></pre></td></tr></table></figure>
+
+<p>编译过程比较耗时. 请内心等待. 可以一边等待一边写博客.  选择用源码方式安装CMake, 主要原因是这种方式安装的CMake和vscode 的 CMake插件配合的非常好.</p>
+<h2 id="检验CMake的版本"><a href="#检验CMake的版本" class="headerlink" title="检验CMake的版本:"></a>检验CMake的版本:</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~</span><br><span class="line">cmake --version</span><br></pre></td></tr></table></figure>
+
+<h2 id="给vscode-安装cmake插件"><a href="#给vscode-安装cmake插件" class="headerlink" title="给vscode 安装cmake插件"></a>给vscode 安装cmake插件</h2><p><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>X</kbd> 打开插件面板, 搜索cmake.  安装 CMake, CMake Tools 这两个扩展.</p>
+<p> 会提示重新加载vscode, 重新加载即可.</p>
+<h1 id="构建一个CMake管理的程序"><a href="#构建一个CMake管理的程序" class="headerlink" title="构建一个CMake管理的程序"></a>构建一个CMake管理的程序</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~</span><br><span class="line">mkdir cmake00</span><br><span class="line"><span class="built_in">cd</span> <span class="built_in">cd</span> cmake00/</span><br><span class="line">code .	<span class="comment">#用vscode 打开这个目录</span></span><br></pre></td></tr></table></figure>
+
+<p>在新开的vscode中,<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>p</kbd>打开面板. 输入cmake. </p>
+<ol>
+<li><p>选择 CMake:Quick start</p>
+</li>
+<li><p>选择 gcc </p>
+</li>
+<li><p>输入项目文件名称</p>
+<p>一个cmake项目的基本结构就建好了.   </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ls</span><br><span class="line">build  CMakeLists.txt  main.cpp</span><br></pre></td></tr></table></figure>
+
+<p>CMakeLists.txt</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">3.0</span>.<span class="number">0</span>)</span><br><span class="line"><span class="keyword">project</span>(cmDemo00 VERSION <span class="number">0.1</span>.<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">include</span>(CTest)</span><br><span class="line"><span class="keyword">enable_testing</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">add_executable</span>(cmDemo00 main.cpp)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(CPACK_PROJECT_NAME <span class="variable">$&#123;PROJECT_NAME&#125;</span>)</span><br><span class="line"><span class="keyword">set</span>(CPACK_PROJECT_VERSION <span class="variable">$&#123;PROJECT_VERSION&#125;</span>)</span><br><span class="line"><span class="keyword">include</span>(CPack)</span><br></pre></td></tr></table></figure>
+
+<p>main.cpp</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span>, <span class="keyword">char</span>**)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"Hello, world!\n"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>E</kbd> 打开资源面板， 可以清楚的开到项目文件结构</p>
+<p>打开 main.cpp 会提示安装 c++扩展。 安装即可。</p>
+<p>同时， vscode的 底部的状态栏上会多出 <strong>编译类型选择， 编译工具选择， 编译，调试 ，运行，测试</strong></p>
+</li>
+</ol>
+<h2 id="关于-C-新标准"><a href="#关于-C-新标准" class="headerlink" title="关于 C++ 新标准"></a>关于 C++ 新标准</h2>   <figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">3.0</span>.<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># specify the C++ standard</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_STANDARD <span class="number">11</span>)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_STANDARD_REQUIRED <span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">project</span>(cmDemo00 VERSION <span class="number">0.1</span>.<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">include</span>(CTest)</span><br><span class="line"><span class="keyword">enable_testing</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">add_executable</span>(cmDemo00 main.cpp)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(CPACK_PROJECT_NAME <span class="variable">$&#123;PROJECT_NAME&#125;</span>)</span><br><span class="line"><span class="keyword">set</span>(CPACK_PROJECT_VERSION <span class="variable">$&#123;PROJECT_VERSION&#125;</span>)</span><br><span class="line"><span class="keyword">include</span>(CPack)</span><br></pre></td></tr></table></figure>
+
+   <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span>, <span class="keyword">char</span>**)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; <span class="string">"Hello, world!\n"</span>;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; v&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>&#125;;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">auto</span> &amp;&amp;i : v)</span><br><span class="line">    &#123;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="演示项目git地址"><a href="#演示项目git地址" class="headerlink" title="演示项目git地址"></a>演示项目git地址</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https:&#x2F;&#x2F;github.com&#x2F;gwl0913&#x2F;cmake00.git</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/07/05/%E6%90%AD%E5%BB%BA%E8%BF%9C%E7%A8%8BCMake%E7%8E%AF%E5%A2%83/" data-id="ckc9msyeu0003ek9gayd14zqn" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/07/05/%E6%89%93%E9%80%A0%E4%B8%80%E4%B8%AAweb%E6%9C%8D%E5%8A%A1%E6%A1%86%E6%9E%B6/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          打造一个web服务框架
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2020/07/05/%E4%BD%BF%E7%94%A8vscode%E7%9A%84%E6%AD%A3%E7%A1%AE%E5%A7%BF%E5%8A%BF/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">使用vscode的正确姿势</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">七月 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">最新文章</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/07/05/%E6%89%93%E9%80%A0%E4%B8%80%E4%B8%AAweb%E6%9C%8D%E5%8A%A1%E6%A1%86%E6%9E%B6/">打造一个web服务框架</a>
+          </li>
+        
+          <li>
+            <a href="/2020/07/05/%E6%90%AD%E5%BB%BA%E8%BF%9C%E7%A8%8BCMake%E7%8E%AF%E5%A2%83/">搭建远程CMake环境</a>
+          </li>
+        
+          <li>
+            <a href="/2020/07/05/%E4%BD%BF%E7%94%A8vscode%E7%9A%84%E6%AD%A3%E7%A1%AE%E5%A7%BF%E5%8A%BF/">使用vscode的正确姿势</a>
+          </li>
+        
+          <li>
+            <a href="/2020/07/05/%E4%BB%8Ehello-world%E5%BC%80%E5%A7%8B/">从hello-world开始</a>
+          </li>
+        
+          <li>
+            <a href="/2020/07/05/hello-world/">Hello World</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 关文林<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
