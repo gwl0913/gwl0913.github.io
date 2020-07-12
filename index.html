@@ -64,6 +64,162 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-彻底掌握promise精髓" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/07/12/%E5%BD%BB%E5%BA%95%E6%8E%8C%E6%8F%A1promise%E7%B2%BE%E9%AB%93/" class="article-date">
+  <time datetime="2020-07-12T06:27:56.000Z" itemprop="datePublished">2020-07-12</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/07/12/%E5%BD%BB%E5%BA%95%E6%8E%8C%E6%8F%A1promise%E7%B2%BE%E9%AB%93/">彻底掌握promise精髓</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>彻底掌握promise精髓</strong></p>
+<ol start="2">
+<li><p>编程语言使用的是nodejs.  </p>
+</li>
+<li><p>为了清晰形象, 用了大量的中文函数名和参数名</p>
+</li>
+</ol>
+<p><strong>目录</strong></p>
+<p>   [TOC]</p>
+<h3 id="异步做事的基本特点"><a href="#异步做事的基本特点" class="headerlink" title="异步做事的基本特点"></a>异步做事的基本特点</h3><ol>
+<li>做任何事都有 成功和失败 两种可能</li>
+<li>成功的结局一般称之为成果, 失败的结局往往称之为下场</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 模拟异步做事过程.</span></span><br><span class="line"><span class="comment"> * 异步的特点是:任务安排下去,就不用管了.完成情况等通知</span></span><br><span class="line"><span class="comment"> * 这个模拟,成功,失败都各有通知渠道.</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param <span class="type">&#123;string&#125;</span> </span>任务名称 </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param <span class="type">&#123;callback&#125;</span> </span>成果通知 :回调函数,用来通知任务取得的成果</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param <span class="type">&#123;callback&#125;</span> </span>下场通告 :回调函数,用来通知任务失败的下场</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> 做(<span class="params">任务名称, 成果通知, 下场通告</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> re = <span class="built_in">Math</span>.random();</span><br><span class="line">    setTimeout(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (re &lt; <span class="number">0.8</span>) &#123;</span><br><span class="line">            <span class="keyword">let</span> 成果 = <span class="string">'\t'</span> + 任务名称 + <span class="string">' ==&gt;成功完成'</span></span><br><span class="line">            成果通知(成果)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">let</span> 下场 = <span class="string">'\t'</span> + 任务名称 + <span class="string">' ==&gt;失败收场'</span></span><br><span class="line">            下场通告(下场)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;, <span class="built_in">Math</span>.random() * <span class="number">2000</span> + <span class="number">1000</span>);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">console</span>.log(任务名称, <span class="string">":已经开始了"</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="随时记录"><a href="#随时记录" class="headerlink" title="随时记录"></a>随时记录</h4><ol>
+<li>定义一个辅助函数,记录一些信息. </li>
+<li>形象的函数名有助于理解整体过程</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 随时记录是好习惯</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> 记录(<span class="params">info</span>) </span>&#123; <span class="built_in">console</span>.log(info); &#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="做几件小事"><a href="#做几件小事" class="headerlink" title="做几件小事"></a>做几件小事</h4><p>先多做几件小事,体会一下异步处理了特点</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">做(<span class="string">'第一件小事'</span>, 成果 =&gt; 记录(成果), 下场 =&gt; 记录(下场))</span><br><span class="line">做(<span class="string">'第二件小事'</span>, 成果 =&gt; 记录(成果), 下场 =&gt; 记录(下场))</span><br><span class="line">做(<span class="string">'第三件小事'</span>, 成果 =&gt; 记录(成果), 下场 =&gt; 记录(下场))</span><br><span class="line">做(<span class="string">'第四件小事'</span>, 成果 =&gt; 记录(成果), 下场 =&gt; 记录(下场))</span><br><span class="line">做(<span class="string">'第五件小事'</span>, 成果 =&gt; 记录(成果), 下场 =&gt; 记录(下场))</span><br><span class="line">记录(<span class="string">'===== 安排了5件小事后====\n\t开始静候佳音'</span>)</span><br></pre></td></tr></table></figure>
+
+<p>运行结果</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">第一件小事 :已经开始了</span><br><span class="line">第二件小事 :已经开始了</span><br><span class="line">第三件小事 :已经开始了</span><br><span class="line">第四件小事 :已经开始了</span><br><span class="line">第五件小事 :已经开始了</span><br><span class="line">===== 安排了5件小事后====</span><br><span class="line">        开始静候佳音</span><br><span class="line">        第四件小事 ==&gt;失败收场</span><br><span class="line">        第三件小事 ==&gt;成功完成</span><br><span class="line">        第二件小事 ==&gt;成功完成</span><br><span class="line">        第一件小事 ==&gt;失败收场</span><br><span class="line">        第五件小事 ==&gt;失败收场</span><br></pre></td></tr></table></figure>
+
+<h4 id="异步处理特点分析"><a href="#异步处理特点分析" class="headerlink" title="异步处理特点分析:"></a>异步处理特点分析:</h4><ol>
+<li>启动任务非常方便</li>
+<li>任务结束次序不确定</li>
+<li>处理任务结束通知非常方便</li>
+</ol>
+<h3 id="尝试做一件大事"><a href="#尝试做一件大事" class="headerlink" title="尝试做一件大事"></a>尝试做一件大事</h3><ol>
+<li><p>大事是一系列的小事构成的.</p>
+</li>
+<li><p>做成大事的关键是安排好小事的处理次序</p>
+</li>
+<li><p>下面做一件天大的事.</p>
+<p>俗话说”民以食为天”. 因此选择<strong>吃菜</strong>这件大事作为例子.  这件大事的次序是:</p>
+</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> 大事的步骤 = [<span class="string">'1买菜'</span>, <span class="string">'2洗菜'</span>, <span class="string">'3切菜'</span>, <span class="string">'4炒菜'</span>, <span class="string">'5吃菜'</span>]</span><br></pre></td></tr></table></figure>
+
+<p>把这件天大的事安排下去</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">做(<span class="string">'1买菜'</span>, 成果 =&gt; 记录(成果), 下场 =&gt; 记录(下场))</span><br><span class="line">做(<span class="string">'2洗菜'</span>, 成果 =&gt; 记录(成果), 下场 =&gt; 记录(下场))</span><br><span class="line">做(<span class="string">'3切菜'</span>, 成果 =&gt; 记录(成果), 下场 =&gt; 记录(下场))</span><br><span class="line">做(<span class="string">'4炒菜'</span>, 成果 =&gt; 记录(成果), 下场 =&gt; 记录(下场))</span><br><span class="line">做(<span class="string">'5吃菜'</span>, 成果 =&gt; 记录(成果), 下场 =&gt; 记录(下场))</span><br></pre></td></tr></table></figure>
+
+<p>结果:这件大事办成下面这个样子</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">1买菜 :已经开始了</span><br><span class="line">2洗菜 :已经开始了</span><br><span class="line">3切菜 :已经开始了</span><br><span class="line">4炒菜 :已经开始了</span><br><span class="line">5吃菜 :已经开始了</span><br><span class="line">        3切菜 ==&gt;失败收场</span><br><span class="line">        4炒菜 ==&gt;成功完成</span><br><span class="line">        5吃菜 ==&gt;成功完成</span><br><span class="line">        1买菜 ==&gt;成功完成</span><br><span class="line">        2洗菜 ==&gt;成功完成</span><br></pre></td></tr></table></figure>
+
+<p>这个结果令人抓狂!!! ☹☹☹ 到底是吃没吃到菜啊???</p>
+<p>导致这个结果,其原因是没有次序保障机制, 于是几件小事的结束次序完全乱了.</p>
+<h4 id="引入promise"><a href="#引入promise" class="headerlink" title="引入promise"></a>引入promise</h4><p>promise提供了一种次序保障机制. 保证<strong>前一个步骤正确处理完成,才开展后一个步骤</strong>.</p>
+<p>在继续讨论promise之前, 先回顾一下那件天大的事的步骤</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> 大事的步骤 = [<span class="string">'1买菜'</span>, <span class="string">'2洗菜'</span>, <span class="string">'3切菜'</span>, <span class="string">'4炒菜'</span>, <span class="string">'5吃菜'</span>]</span><br></pre></td></tr></table></figure>
+
+<p>这些步骤可以通过一个从0到4的索引标识, 把其表示出来. </p>
+<p>为了能更清晰地反映步骤更替, 这里定义一个辅助函数, 用来表示推进大事的发展</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 推进大事的步骤.</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> 推进(<span class="params">步骤</span>) </span>&#123; <span class="keyword">return</span> <span class="built_in">parseInt</span>(步骤) + <span class="number">1</span> &#125;</span><br></pre></td></tr></table></figure>
+
+<p>下面定义一个做大事的函数, 并在函数中引入promise.  </p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// promise  提供了一种次序的机制, 方便安排异步处理的次序</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 通过步骤标识, 去完成大的指定阶段</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param <span class="type">&#123;int&#125;</span> </span>分步骤 </span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return <span class="type">&#123;Promise&#125;</span> </span>利用Promise,合理安排后继步骤 </span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> 做大事(<span class="params">分步骤</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">启动下一步, 夭折通知</span>) =&gt;</span> &#123;</span><br><span class="line">        做(大事的步骤[分步骤],</span><br><span class="line">            成果 =&gt; &#123;</span><br><span class="line">                <span class="keyword">let</span> 阶段成果 = <span class="string">'\t大事顺利进行到了第 '</span> + (分步骤 + <span class="number">1</span>) + <span class="string">' 步'</span>;</span><br><span class="line">                记录(阶段成果);</span><br><span class="line">                启动下一步(阶段成果);</span><br><span class="line">            &#125;,</span><br><span class="line">            下场 =&gt; &#123;</span><br><span class="line">                <span class="keyword">let</span> 阶段下场 = <span class="string">'\t大事在第 '</span> + (分步骤 + <span class="number">1</span>) + <span class="string">' 步夭折了'</span>;</span><br><span class="line">                夭折通知(阶段下场);</span><br><span class="line">            &#125;</span><br><span class="line">        )</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>promise确保次序的关键是它的两个回调函数, 一个用作 <strong>启动下一步</strong>, 一个用作 <strong>夭折通知</strong>.</p>
+<p>用好promise的关键是把异步处理放到promise中, 成功则呼叫 启动下一步, 失败则发起 夭折通知</p>
+<p>只要函数返回符合上面两条的规则的一个promise对象. 就可以用好promise了.</p>
+<h4 id="安排一件大事"><a href="#安排一件大事" class="headerlink" title="安排一件大事"></a>安排一件大事</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// promise 的早期用法</span></span><br><span class="line"><span class="keyword">let</span> 启动 = <span class="built_in">parseInt</span>(<span class="string">'0'</span>);</span><br><span class="line">做大事(启动).</span><br><span class="line">    then(阶段 =&gt; 做大事(推进(阶段))).</span><br><span class="line">    then(阶段 =&gt; 做大事(推进(阶段))).</span><br><span class="line">    then(阶段 =&gt; 做大事(推进(阶段))).</span><br><span class="line">    then(阶段 =&gt; 做大事(推进(阶段))).</span><br><span class="line">    then(结束 =&gt; &#123; 记录(<span class="string">'\n\t大事做完了'</span>) &#125;).</span><br><span class="line">    <span class="keyword">catch</span>(下场 =&gt; 记录(下场))</span><br><span class="line">记录(<span class="string">'呵呵, 做大事的同时 还可以做其它事情========='</span>);</span><br><span class="line">记录(<span class="string">'呵呵, 做大事的同时 还可以做其它事情========='</span>);</span><br></pre></td></tr></table></figure>
+
+<p>第一次尝试</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1买菜 :已经开始了</span><br><span class="line">呵呵, 做大事的同时 还可以做其它事情=========</span><br><span class="line">呵呵, 做大事的同时 还可以做其它事情=========</span><br><span class="line">        大事顺利进行到了第 1 步</span><br><span class="line">2洗菜 :已经开始了</span><br><span class="line">        大事顺利进行到了第 2 步</span><br><span class="line">3切菜 :已经开始了</span><br><span class="line">        大事在第 3 步夭折了</span><br></pre></td></tr></table></figure>
+
+<p>多次尝试后, 终于:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">1买菜 :已经开始了</span><br><span class="line">呵呵, 做大事的同时 还可以做其它事情=========</span><br><span class="line">呵呵, 做大事的同时 还可以做其它事情=========</span><br><span class="line">        大事顺利进行到了第 1 步</span><br><span class="line">2洗菜 :已经开始了</span><br><span class="line">        大事顺利进行到了第 2 步</span><br><span class="line">3切菜 :已经开始了</span><br><span class="line">        大事顺利进行到了第 3 步</span><br><span class="line">4炒菜 :已经开始了</span><br><span class="line">        大事顺利进行到了第 4 步</span><br><span class="line">5吃菜 :已经开始了</span><br><span class="line">        大事顺利进行到了第 5 步</span><br><span class="line"></span><br><span class="line">        大事做完了</span><br></pre></td></tr></table></figure>
+
+<h4 id="用好promise的关键"><a href="#用好promise的关键" class="headerlink" title="用好promise的关键"></a>用好promise的关键</h4><ol>
+<li><p>把握好 .then() 和 .catch(). </p>
+<ol>
+<li>.then() 和 .catch()都接收一个参数, 这个参数是 一个单参数的回调函数.</li>
+<li>第一个返回promise呼叫的是起始,后面可以跟随任意多的.then().</li>
+<li>之后的.then()都会依次执行</li>
+<li>能够执行到最后一个.then() 表示一切顺利</li>
+<li>.catch()负责处理夭折通知. <strong>注意</strong> 夭折可以发生在任何阶段.</li>
+</ol>
+</li>
+<li><p>每一个.then()中的回调函数,都需要返回promise.</p>
+</li>
+<li><p>promise的本质是把多个异步处理<strong>串联起来, 形成一个大的异步处理</strong></p>
+<h3 id="象同步一样处理异步"><a href="#象同步一样处理异步" class="headerlink" title="象同步一样处理异步"></a>象同步一样处理异步</h3></li>
+</ol>
+<p>​    promise配合.then() .catch(), 虽然可以拼接多个异步处理, 但是语法比较怪异. 于是,es6有提供了await语法. 采用await 语法,  处理起来就和同步处理的语法一致了.  </p>
+<p>​    要采用await语法, 就必须用一个用async修饰的函数来包裹 await 语句, 看起来如下.</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 像同步一样的处理异步</span></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> 干练做大事(<span class="params">大事名</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">const</span> i <span class="keyword">in</span> [<span class="number">0</span>,<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>]) &#123;</span><br><span class="line">            <span class="keyword">await</span> 做大事(i);</span><br><span class="line">        &#125;</span><br><span class="line">        记录(<span class="string">`**    <span class="subst">$&#123;大事名&#125;</span> 办成了`</span>)</span><br><span class="line">    &#125; <span class="keyword">catch</span> (夭折信息) &#123;</span><br><span class="line">        记录(<span class="string">`**    <span class="subst">$&#123;大事名&#125;</span> 办砸了 <span class="subst">$&#123;夭折信息&#125;</span>`</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>试一试同时办两件大事</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">干练做大事(<span class="string">'第一件大事'</span>);</span><br><span class="line">干练做大事(<span class="string">'第二件大事'</span>);</span><br></pre></td></tr></table></figure>
+
+<h4 id="关于-async-自动返回-promise"><a href="#关于-async-自动返回-promise" class="headerlink" title="关于 async 自动返回 promise"></a>关于 async 自动返回 promise</h4><p>用async 修饰的函数会自动返回promise. 这一点可用如下的代码来验证</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> <span class="title">fun</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"><span class="comment">// return 'hello'</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">console</span>.log(fun());</span><br></pre></td></tr></table></figure>
+
+<p>结果输出</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">Promise</span> &#123; <span class="literal">undefined</span> &#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="不写promise代码"><a href="#不写promise代码" class="headerlink" title="不写promise代码"></a>不写promise代码</h4><ol>
+<li>​    有了 async 这个利器, 终于不用编写异常难看的 return new Promise…….这种代码了. </li>
+<li>​    于是,  代码就可以简洁如下. 但完成同样的功能.</li>
+</ol>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> 办小事(<span class="params">步骤</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> isOK = <span class="built_in">Math</span>.random() &lt; <span class="number">0.8</span></span><br><span class="line">    <span class="keyword">let</span> 步骤名 = 大事的步骤[步骤]</span><br><span class="line">    <span class="keyword">if</span> (isOK) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">`<span class="subst">$&#123;步骤名&#125;</span> 办成了`</span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="string">`<span class="subst">$&#123;步骤名&#125;</span> 办砸了`</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">function</span> 多办小事(<span class="params">大事</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">const</span> i <span class="keyword">in</span> [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]) &#123;</span><br><span class="line">            <span class="keyword">let</span> 阶段 = <span class="keyword">await</span> 办小事(i)</span><br><span class="line">            记录(<span class="string">` *<span class="subst">$&#123;大事&#125;</span> <span class="subst">$&#123;阶段&#125;</span>`</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        记录(<span class="string">`**<span class="subst">$&#123;大事&#125;</span> 全部完成`</span>);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">        记录(<span class="string">`**<span class="subst">$&#123;大事&#125;</span> 夭折    error`</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>​    同时办3件大事</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 安排3件大事</span></span><br><span class="line">多办小事(<span class="string">'大事 1 '</span>)</span><br><span class="line">多办小事(<span class="string">'大事 2 '</span>)</span><br><span class="line">多办小事(<span class="string">'大事 3 '</span>)</span><br></pre></td></tr></table></figure>
+
+<p>​    看看结果</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"> *大事 1  1买菜 办成了</span><br><span class="line"> *大事 2  1买菜 办成了</span><br><span class="line"> *大事 3  1买菜 办成了</span><br><span class="line">**大事 1  夭折    2洗菜 办砸了</span><br><span class="line"> *大事 2  2洗菜 办成了</span><br><span class="line"> *大事 3  2洗菜 办成了</span><br><span class="line"> *大事 2  3切菜 办成了</span><br><span class="line"> *大事 3  3切菜 办成了</span><br><span class="line"> *大事 2  4炒菜 办成了</span><br><span class="line"> *大事 3  4炒菜 办成了</span><br><span class="line"> *大事 2  5吃菜 办成了</span><br><span class="line">**大事 2  全部完成</span><br><span class="line"> *大事 3  5吃菜 办成了</span><br><span class="line">**大事 3  全部完成</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/07/12/%E5%BD%BB%E5%BA%95%E6%8E%8C%E6%8F%A1promise%E7%B2%BE%E9%AB%93/" data-id="ckcip6wg00000k59g66th45f0" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-打造一个web服务框架" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2020/07/05/%E6%89%93%E9%80%A0%E4%B8%80%E4%B8%AAweb%E6%9C%8D%E5%8A%A1%E6%A1%86%E6%9E%B6/" class="article-date">
@@ -300,7 +456,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/07/05/%E6%89%93%E9%80%A0%E4%B8%80%E4%B8%AAweb%E6%9C%8D%E5%8A%A1%E6%A1%86%E6%9E%B6/" data-id="ckc9pxijt0003lw9g516zakfv" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/07/05/%E6%89%93%E9%80%A0%E4%B8%80%E4%B8%AAweb%E6%9C%8D%E5%8A%A1%E6%A1%86%E6%9E%B6/" data-id="ckcip6wgf0001k59g8j5s7wms" class="article-share-link">Share</a>
       
       
     </footer>
@@ -390,7 +546,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/07/05/%E6%90%AD%E5%BB%BA%E8%BF%9C%E7%A8%8BCMake%E7%8E%AF%E5%A2%83/" data-id="ckc9pxijw0004lw9gdims8ndm" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/07/05/%E6%90%AD%E5%BB%BA%E8%BF%9C%E7%A8%8BCMake%E7%8E%AF%E5%A2%83/" data-id="ckcip6wgv0005k59g985vgshx" class="article-share-link">Share</a>
       
       
     </footer>
@@ -532,7 +688,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/07/05/%E4%BD%BF%E7%94%A8vscode%E7%9A%84%E6%AD%A3%E7%A1%AE%E5%A7%BF%E5%8A%BF/" data-id="ckc9pxijq0002lw9g7yfmc828" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/07/05/%E4%BD%BF%E7%94%A8vscode%E7%9A%84%E6%AD%A3%E7%A1%AE%E5%A7%BF%E5%8A%BF/" data-id="ckcip6wgt0004k59gcynkhosd" class="article-share-link">Share</a>
       
       
     </footer>
@@ -729,7 +885,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/07/05/%E4%BB%8Ehello-world%E5%BC%80%E5%A7%8B/" data-id="ckc9pxijm0001lw9g5bd98fva" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/07/05/%E4%BB%8Ehello-world%E5%BC%80%E5%A7%8B/" data-id="ckcip6wgj0002k59ger1eceyb" class="article-share-link">Share</a>
       
       
     </footer>
@@ -778,7 +934,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/07/05/hello-world/" data-id="ckc9pxij40000lw9g3aeldej2" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/07/05/hello-world/" data-id="ckcip6wgp0003k59g69wvg0r1" class="article-share-link">Share</a>
       
       
     </footer>
@@ -819,6 +975,10 @@
       <ul>
         
           <li>
+            <a href="/2020/07/12/%E5%BD%BB%E5%BA%95%E6%8E%8C%E6%8F%A1promise%E7%B2%BE%E9%AB%93/">彻底掌握promise精髓</a>
+          </li>
+        
+          <li>
             <a href="/2020/07/05/%E6%89%93%E9%80%A0%E4%B8%80%E4%B8%AAweb%E6%9C%8D%E5%8A%A1%E6%A1%86%E6%9E%B6/">打造一个web服务框架</a>
           </li>
         
@@ -832,10 +992,6 @@
         
           <li>
             <a href="/2020/07/05/%E4%BB%8Ehello-world%E5%BC%80%E5%A7%8B/">从hello-world开始</a>
-          </li>
-        
-          <li>
-            <a href="/2020/07/05/hello-world/">Hello World</a>
           </li>
         
       </ul>
